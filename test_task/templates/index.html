@@ -1,0 +1,49 @@
+<html>
+<head>
+	<title>Test task</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+				integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+	<div class="container-fluid" style="height: 100%">
+		<div class="row justify-content-center" style="height: 100%">
+			{% if error_message %}
+				<div class="alert alert-success align-self-center">
+					{{ error_message }}
+				</div>
+			{% else %}
+			<div class="card align-self-center col-lg-4 col-md-6 col-sm">
+				<div class="card-body">
+						<h1 class="card-title">{{ question.question_text }}</h1>
+
+						<form action="{% url 'index' %}" method="post">
+							{% csrf_token %}
+							<input type="hidden" name="question" value="{{ question.id }}" />
+							{% for choice in question.choice_set.all %}
+								<div class="input-group mb-3">
+									<div class="input-group-prepend">
+    								<div class="input-group-text">
+											<input type="checkbox" name="choices[]" id="choice{{ forloop.counter }}"
+														 value="{{ choice.id }}"/>
+										</div>
+									</div>
+									<div class="form-control">
+										<label for="choice{{ forloop.counter }}">
+											{{ choice.choice_text }}
+										</label>
+									</div>
+								</div>
+							{% endfor %}
+							<div class="row justify-content-center">
+								<input type="submit" class="btn btn-primary justify-self-center" value="Submit" />
+							</div>
+						</form>
+				</div>
+			</div>
+			{% endif %}
+		</div>
+	</div>
+
+</body>
+</html>
+

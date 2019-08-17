@@ -1,0 +1,68 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}Survey statistics{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+<script src="{% static '/palette.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+{{ block.super }}
+<h1>General statistics</h1>
+<div class="flex">
+  <p>Total number of questions: <strong>{{ stats.questions.total }}</strong></p>
+  <p>Total number of questions with answers: <strong>{{ stats.questions.with_answers }}</strong></p>
+  <p>Total number of questions without answers: <strong>{{ stats.questions.no_answers }}</strong></p>
+</div>
+<hr/>
+<div class="flex">
+  <p>Minimum number of options per question: <strong>{{ stats.choices.min }}</strong></p>
+  <p>Maximum number of options per question: <strong>{{ stats.choices.max }}</strong></p>
+</div>
+<hr/>
+<div class="flex">
+  <p>Total survey visitors: <strong>{{ stats.visitors.total }}</strong></p>
+  <p>Total survey respondents: <strong>{{ stats.visitors.respondents }}</strong></p>
+</div>
+
+<h1>Answers statistics</h1>
+<div class="flex">
+  {% for question in questions %}
+    <div>
+      <h3>{{ question.text }}</h3>
+      <canvas id="myChart{{ forloop.counter }}" width="500" height="300"></canvas>
+      <script>
+        var ctx = document.getElementById('myChart{{ forloop.counter }}');
+        let myDoughnutChart{{ forloop.counter }} = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+              datasets: [{
+                  data: {{ question.data | safe }},
+                  backgroundColor: palette('tol', 10).map(function(hex) {
+                    return '#' + hex;
+                  })
+                }],
+              labels: {{ question.labels | safe }}
+            },
+        });
+      </script>
+    </div>
+  {% endfor %}
+</div>
+
+<style>
+  .flex {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+  p, h1, h3 {flex: 1; text-align: center; margin: 20px}
+  hr {width: 100%;}
+  canvas {max-width: 500px;}
+</style>
+{% endblock %}
