@@ -10,7 +10,7 @@ with some modifications, such as:
 To run this project, you need to have docker installed in your system 
 (see https://docs.docker.com/install/) 
 
-Installing and starting this project is as simply cloning it from this repository
+Installing and starting this project is as simple as cloning it from this repository
 and running the command: ```docker-compose up``` from its main folder.
 
 Docker will create a folder mysql in your main project folder to store all MySQL-related data.
@@ -22,4 +22,4 @@ Django admin panel is available at http://localhost:8000/admin with
 username: ```admin```, and password: ```admin```
 
 The admin panel allows you to create and edit Questions, Choice options, as well as see 
-Visitor Answers.
+Visitor Answers, as well as see some statistics and question charts.
