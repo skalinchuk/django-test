@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.views.generic.base import TemplateView
 from django.db.models import Count
 from .models import Question, Choice, Visitor, VisitorAnswer
+import json
 
 
 admin.site.register(Question)
@@ -39,17 +40,17 @@ class StatisticsView(TemplateView):
             answers[answer['choice_id']] = answer['total']
 
         for question in Question.objects.all():
-            question_data = ''
-            question_labels = ''
+            question_data = []
+            question_labels = []
 
             for choice in question.choice_set.all():
-                question_data += str(answers.get(choice.pk, 0)) + ','
-                question_labels += '"{}",'.format(choice.choice_text)
+                question_data.append(str(answers.get(choice.pk, 0)))
+                question_labels.append(choice.choice_text)
 
             questions.append({
                 'text': question.question_text,
-                'data': '[{}]'.format(question_data),
-                'labels': '[{}]'.format(question_labels)
+                'data': json.dumps(question_data),
+                'labels': json.dumps(question_labels)
 
             })
 
